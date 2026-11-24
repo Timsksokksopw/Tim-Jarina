@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#000000" />
+    <title>panat://bloom</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage">
+        <canvas id="rain" aria-hidden="true"></canvas>
+        <canvas id="scene" aria-hidden="true"></canvas>
+        <canvas id="glow" aria-hidden="true"></canvas>
+        <div id="lock" class="lock" aria-hidden="true"><i></i><i></i><i></i><i></i><span></span></div>
+      </div>
+      <div class="crt" aria-hidden="true"></div>
+      <pre id="hud" class="hud" aria-hidden="true"></pre>
+      <div class="banner" aria-hidden="true">ZUGRIFF GEWÄHRT</div>
+      <div id="flash" class="flash" aria-hidden="true"></div>
+      <section id="terminal" class="terminal" hidden>
+        <div class="term-inner">
+          <div class="term-log" role="log" aria-live="polite"></div>
+          <form class="term-line" hidden>
+            <label class="prompt" for="cmd">panat@bloom:~$</label>
+            <input
+              id="cmd"
+              name="cmd"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              enterkeyhint="send"
+              placeholder="TT.MM.JJJJ"
+            />
+          </form>
+        </div>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
