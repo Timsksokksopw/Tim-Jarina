@@ -216,8 +216,38 @@ function frame(now: number) {
   requestAnimationFrame(frame);
 }
 
-stageEl.addEventListener('pointermove', (e) => swarm.pointer(e.clientX, e.clientY, sim));
+// finale: drag with mouse or finger to turn the rose
+let dragId = -1;
+let dragX = 0;
+let dragY = 0;
+
+function endDrag(e: PointerEvent) {
+  if (e.pointerId !== dragId) return;
+  dragId = -1;
+  swarm.bloom.release();
+  app.classList.remove('dragging');
+}
+
+stageEl.addEventListener('pointermove', (e) => {
+  if (stage !== 'finale') {
+    swarm.pointer(e.clientX, e.clientY, sim);
+  } else if (e.pointerId === dragId) {
+    swarm.bloom.drag(e.clientX - dragX, e.clientY - dragY);
+    dragX = e.clientX;
+    dragY = e.clientY;
+  }
+});
 stageEl.addEventListener('pointerdown', (e) => {
+  if (stage === 'finale') {
+    if (dragId !== -1 || e.button !== 0) return;
+    dragId = e.pointerId;
+    dragX = e.clientX;
+    dragY = e.clientY;
+    stageEl.setPointerCapture(e.pointerId);
+    swarm.bloom.grab();
+    app.classList.add('dragging');
+    return;
+  }
   swarm.pointer(e.clientX, e.clientY, sim);
   swarm.burst(e.clientX, e.clientY);
   term.focus();
@@ -225,7 +255,10 @@ stageEl.addEventListener('pointerdown', (e) => {
 stageEl.addEventListener('pointerleave', () => swarm.pointerOut());
 stageEl.addEventListener('pointerup', (e) => {
   if (e.pointerType !== 'mouse') swarm.pointerOut();
+  endDrag(e);
 });
+stageEl.addEventListener('pointercancel', endDrag);
+stageEl.addEventListener('lostpointercapture', endDrag);
 window.addEventListener('keydown', () => {
   if (term.waiting && document.activeElement?.id !== 'cmd') term.focus();
 });

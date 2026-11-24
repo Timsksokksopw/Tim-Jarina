@@ -76,6 +76,14 @@ body {
   transition: opacity 2s;
 }
 
+#app.finale #stage {
+  cursor: grab;
+}
+
+#app.finale.dragging #stage {
+  cursor: grabbing;
+}
+
 #app.finale #glow {
   opacity: 0.85;
 }

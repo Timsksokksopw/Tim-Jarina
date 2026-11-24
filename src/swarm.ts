@@ -381,10 +381,12 @@ export class Swarm {
   startFinale(now: number, dpr: number) {
     this.ps = this.ps.filter((p) => p.state !== DEAD);
     this.finaleAt = now;
+    // from here on the pointer turns the rose instead of pushing glyphs away
+    this.pointerOut();
     this.rain.clearMarks();
     this.layoutFinale(dpr);
     const S = this.bloom.S;
-    const descs = this.bloom.makeDescs(Math.max(this.ps.length, clamp(Math.round(S * S * 0.09), 2600, 8000)));
+    const descs = this.bloom.makeDescs(Math.max(this.ps.length, clamp(Math.round(S * S * 0.09), 5200, 9000)));
     while (this.ps.length < descs.length) {
       const p = this.spawn(now);
       p.state = LOCKED;
@@ -407,7 +409,7 @@ export class Swarm {
     const tf = now - this.finaleAt;
     const B = this.bloom;
     const o = this.out;
-    B.frame(Math.max(0, tf - T_BURST));
+    B.frame(Math.max(0, tf - T_BURST), dt);
     this.fade = tf < T_IMPLODE ? 0.3 : tf < T_BURST ? 0.14 : lerp(0.12, 0.36, smoothstep(T_BURST, T_BURST + 3.5, tf));
 
     for (const p of this.ps) {
