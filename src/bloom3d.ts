@@ -142,7 +142,6 @@ export class Bloom {
   private st = 0;
   private hueShift = 0;
   private nCore = 1;
-  private spin = 0;
   private flush = 0;
 
   // orientation: idles on its own, follows the pointer while dragged, then coasts
@@ -288,14 +287,13 @@ export class Bloom {
     this.ct = Math.cos(this.tilt);
     this.st = Math.sin(this.tilt);
     const c = t % BEAT;
-    this.beat = Math.exp(-(((c - 0.06) / 0.07) ** 2)) + 0.65 * Math.exp(-(((c - 0.34) / 0.08) ** 2));
+    this.beat = Math.exp(-(((c - 0.22) / 0.07) ** 2)) + 0.65 * Math.exp(-(((c - 0.5) / 0.08) ** 2));
     this.waveR = c * 1.15;
-    this.waveA = (1 - c / BEAT) * this.open;
+    this.waveA = smoothstep(0, 0.2, c) * (1 - c / BEAT) * this.open;
     this.hueShift = 9 * Math.sin(t * 0.13) + 6 * Math.sin(t * 0.29 + 1);
-    // every 16 s the petal rings shift on by one petal while the colours drift through violet to blue and back
+    // every 16 s the colours drift through violet to blue and back
     const cyc = t % 16;
-    this.spin = cyc > 12 ? easeInOutCubic((cyc - 12) / 4) : 0;
-    this.flush = Math.sin(Math.PI * this.spin);
+    this.flush = cyc > 12 ? Math.sin(Math.PI * easeInOutCubic((cyc - 12) / 4)) : 0;
     this.buildProfiles();
     this.buildDepth();
   }
@@ -463,10 +461,7 @@ export class Bloom {
     let r = lerp(this.pr[o], this.pr[o + 1], k);
     let y = lerp(this.py[o], this.py[o + 1], k);
     const a = lerp(this.pa[o], this.pa[o + 1], k);
-    const ang =
-      phi +
-      v * L.half * (0.62 + 0.38 * smoothstep(0, 0.6, u)) * (1 - 0.1 * smoothstep(0.75, 1, u)) +
-      (((li % 2 ? 1 : -1) * this.spin) / L.n) * TAU;
+    const ang = phi + v * L.half * (0.62 + 0.38 * smoothstep(0, 0.6, u)) * (1 - 0.1 * smoothstep(0.75, 1, u));
     // one side tucks under the neighbour, the rim is slightly wavy
     r *= 1 + 0.075 * v;
     y += (0.022 * Math.sin(v * 4.2 + phi * 3) - 0.02 * v) * u * u * u * this.open;
