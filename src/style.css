@@ -366,7 +366,7 @@ body {
 }
 
 .term-inner::before {
-  content: 'ssh panat@bloom · tty1';
+  content: 'ssh tim@bloom · tty1';
   position: absolute;
   top: -0.8em;
   right: 0;

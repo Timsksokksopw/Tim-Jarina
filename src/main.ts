@@ -11,8 +11,8 @@ import { Terminal } from './terminal';
 import { clamp, sleep } from './util';
 
 const QUESTIONS = [
-  { q: 'Wann hat Panat Geburtstag?', a: '03.09.2007' },
-  { q: 'Wann sind wir zusammengekommen?', a: '09.06.2023' },
+  { q: 'Wann hat Tim Geburtstag?', a: '13.10.2007' },
+  { q: 'Wann sind wir zusammengekommen?', a: '29.05.2026' },
 ];
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string) => document.querySelector(sel) as T;
@@ -113,7 +113,7 @@ function flash(kind: 'go' | 'err') {
   flashEl.className = `flash ${kind}`;
 }
 
-/** Accepts 03.09.2007, 3.9.2007, 3,9,07, 03/09/2007, 2007-09-03, 03092007 … */
+/** Accepts 13.10.2007, 13.10.07, 13,10,07, 13/10/2007, 2007-10-13, 13102007 … */
 function normalizeDate(raw: string): string | null {
   const s = raw.trim();
   let d: number;
@@ -131,7 +131,7 @@ function normalizeDate(raw: string): string | null {
 async function authenticate() {
   term.show();
   await sleep(450);
-  await term.type('$ ./unlock --target herz.panat', 'cmd', 38);
+  await term.type('$ ./unlock --target herz.tim', 'cmd', 38);
   await sleep(250);
   await term.type('[*] verschlüsselte blume gefunden · 2 sicherheitsfragen', 'dim', 70);
   for (let i = 0; i < QUESTIONS.length; i++) {
